@@ -1,0 +1,1092 @@
+/* ═══════════════════════════════════════════
+   NIM BOARD GAME — PREMIUM WOODEN AESTHETIC
+   ═══════════════════════════════════════════ */
+
+/* ─── RESET & BASE ─── */
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+:root {
+    /* Wood Palette */
+    --wood-dark: #4A2F1A;
+    --wood-mid: #6B3F23;
+    --wood-light: #8B5E3C;
+    --wood-highlight: #A87B52;
+    --wood-grain: #5C3A20;
+    --wood-edge: #3A2010;
+
+    /* Metallic Rod */
+    --rod-light: #D8D8D8;
+    --rod-mid: #B0B0B0;
+    --rod-dark: #888888;
+    --rod-shadow: #666666;
+
+    /* Ball */
+    --ball-red: #DC2626;
+    --ball-dark: #991B1B;
+    --ball-highlight: #FCA5A5;
+    --ball-glow: rgba(220, 38, 38, 0.5);
+    --ball-size: 48px;
+
+    /* Players */
+    --p1-color: #3B82F6;
+    --p1-glow: rgba(59, 130, 246, 0.4);
+    --p2-color: #F59E0B;
+    --p2-glow: rgba(245, 158, 11, 0.4);
+
+    /* UI */
+    --gold: #FFD700;
+    --text-light: #F5F0E8;
+    --text-muted: #A89880;
+    --success: #22C55E;
+    --danger: #EF4444;
+
+    /* Spacing */
+    --gap-xs: 4px;
+    --gap-sm: 8px;
+    --gap-md: 16px;
+    --gap-lg: 24px;
+    --gap-xl: 32px;
+    --gap-2xl: 48px;
+
+    /* Fonts */
+    --font-display: 'Playfair Display', Georgia, serif;
+    --font-body: 'Inter', system-ui, -apple-system, sans-serif;
+
+    /* Transitions */
+    --ease-out: cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    --ease-bounce: cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+html {
+    font-size: 16px;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+    font-family: var(--font-body);
+    background:
+        linear-gradient(135deg, #1a0f08 0%, #2d1a0e 40%, #1a0f08 100%);
+    color: var(--text-light);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    overflow-x: hidden;
+}
+
+/* ─── HEADER ─── */
+#game-header {
+    width: 100%;
+    background:
+        linear-gradient(180deg,
+            var(--wood-dark) 0%,
+            var(--wood-mid) 40%,
+            var(--wood-dark) 100%);
+    border-bottom: 3px solid var(--wood-edge);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+    position: relative;
+    z-index: 10;
+}
+
+#game-header::after {
+    content: '';
+    position: absolute;
+    bottom: -3px;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--wood-highlight), transparent);
+}
+
+.header-inner {
+    max-width: 960px;
+    margin: 0 auto;
+    padding: var(--gap-md) var(--gap-lg);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: var(--gap-md);
+}
+
+.logo-area {
+    display: flex;
+    align-items: baseline;
+    gap: var(--gap-sm);
+}
+
+#game-title {
+    font-family: var(--font-display);
+    font-weight: 900;
+    font-size: 2.4rem;
+    letter-spacing: 4px;
+    color: var(--gold);
+    text-shadow:
+        0 2px 4px rgba(0, 0, 0, 0.6),
+        0 0 20px rgba(255, 215, 0, 0.2);
+    line-height: 1;
+}
+
+.logo-subtitle {
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    color: var(--text-muted);
+}
+
+.header-controls {
+    display: flex;
+    align-items: center;
+    gap: var(--gap-lg);
+    flex-wrap: wrap;
+}
+
+/* ─── PLAYER BADGES ─── */
+.player-badges {
+    display: flex;
+    align-items: center;
+    gap: var(--gap-sm);
+}
+
+.player-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    transition:
+        opacity 0.2s var(--ease-out),
+        border-color 0.2s var(--ease-out),
+        box-shadow 0.2s var(--ease-out);
+    border: 2px solid transparent;
+    opacity: 0.5;
+}
+
+.player-badge.p1 {
+    color: var(--p1-color);
+}
+
+.player-badge.p2 {
+    color: var(--p2-color);
+}
+
+.player-badge.active-player {
+    opacity: 1;
+    background: rgba(255, 255, 255, 0.08);
+}
+
+.player-badge.active-player.p1 {
+    border-color: var(--p1-color);
+    box-shadow: 0 0 12px var(--p1-glow);
+}
+
+.player-badge.active-player.p2 {
+    border-color: var(--p2-color);
+    box-shadow: 0 0 12px var(--p2-glow);
+}
+
+.badge-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: currentColor;
+    transition: transform 0.3s var(--ease-out);
+}
+
+.active-player .badge-dot {
+    animation: pulse-dot 1.5s ease-in-out infinite;
+}
+
+@keyframes pulse-dot {
+    0%, 100% { transform: scale(1); opacity: 1; }
+    50% { transform: scale(1.4); opacity: 0.6; }
+}
+
+.vs-divider {
+    font-size: 0.7rem;
+    font-weight: 700;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 2px;
+}
+
+/* ─── WOOD BUTTONS ─── */
+.btn-wood {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 18px;
+    border: none;
+    border-radius: 8px;
+    font-family: var(--font-body);
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--text-light);
+    cursor: pointer;
+    transition: all 0.2s var(--ease-out);
+    background:
+        linear-gradient(180deg,
+            var(--wood-light) 0%,
+            var(--wood-mid) 100%);
+    border: 1px solid var(--wood-edge);
+    box-shadow:
+        0 2px 8px rgba(0, 0, 0, 0.3),
+        inset 0 1px 0 rgba(255, 255, 255, 0.1);
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.4);
+}
+
+.btn-wood:hover {
+    background:
+        linear-gradient(180deg,
+            var(--wood-highlight) 0%,
+            var(--wood-light) 100%);
+    box-shadow:
+        0 4px 12px rgba(0, 0, 0, 0.4),
+        inset 0 1px 0 rgba(255, 255, 255, 0.15);
+    transform: translateY(-1px);
+}
+
+.btn-wood:active {
+    transform: translateY(0);
+    box-shadow:
+        0 1px 4px rgba(0, 0, 0, 0.3),
+        inset 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.btn-wood-lg {
+    padding: 12px 32px;
+    font-size: 0.95rem;
+    border-radius: 10px;
+}
+
+/* ─── GAME CONTAINER ─── */
+#game-container {
+    width: 100%;
+    max-width: 960px;
+    padding: var(--gap-lg);
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    gap: var(--gap-md);
+}
+
+/* ─── GAME BOARD (Wooden Surface) ─── */
+#game-board {
+    position: relative;
+    border-radius: 16px;
+    padding: var(--gap-lg) var(--gap-xl);
+    border: 4px solid var(--wood-edge);
+    box-shadow:
+        0 8px 32px rgba(0, 0, 0, 0.5),
+        inset 0 2px 4px rgba(255, 255, 255, 0.05),
+        inset 0 -2px 4px rgba(0, 0, 0, 0.3);
+    overflow: hidden;
+
+    /* Realistic wood grain using layered gradients */
+    background:
+        /* Grain overlay */
+        repeating-linear-gradient(
+            87deg,
+            transparent,
+            transparent 2px,
+            rgba(0, 0, 0, 0.03) 2px,
+            rgba(0, 0, 0, 0.03) 4px
+        ),
+        repeating-linear-gradient(
+            92deg,
+            transparent,
+            transparent 8px,
+            rgba(0, 0, 0, 0.04) 8px,
+            rgba(0, 0, 0, 0.04) 9px
+        ),
+        /* Knot accents */
+        radial-gradient(ellipse 60px 40px at 15% 30%, rgba(90, 50, 20, 0.3), transparent),
+        radial-gradient(ellipse 40px 50px at 75% 60%, rgba(90, 50, 20, 0.2), transparent),
+        radial-gradient(ellipse 50px 35px at 50% 85%, rgba(90, 50, 20, 0.15), transparent),
+        /* Main wood surface */
+        linear-gradient(
+            175deg,
+            #9B6B43 0%,
+            #8B5E3C 15%,
+            #7D5030 30%,
+            #8B5E3C 45%,
+            #A87B52 55%,
+            #8B5E3C 70%,
+            #7D5030 85%,
+            #6B3F23 100%
+        );
+}
+
+#game-board::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: 12px;
+    background:
+        linear-gradient(180deg,
+            rgba(255, 255, 255, 0.06) 0%,
+            transparent 30%,
+            transparent 70%,
+            rgba(0, 0, 0, 0.1) 100%
+        );
+    pointer-events: none;
+}
+
+/* ─── SIDE LABELS ─── */
+.side-labels {
+    display: flex;
+    justify-content: space-between;
+    padding: 0 60px;
+    margin-bottom: var(--gap-md);
+    position: relative;
+}
+
+.side-label {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 0.9rem;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+.side-a-label {
+    color: var(--gold);
+    flex: 1;
+    text-align: center;
+}
+
+.side-b-label {
+    color: var(--text-muted);
+    flex: 1;
+    text-align: center;
+}
+
+/* ─── ROD ROW ─── */
+.rod-row {
+    display: flex;
+    align-items: center;
+    gap: 0;
+    margin-bottom: var(--gap-xl);
+    position: relative;
+}
+
+.rod-row:last-of-type {
+    margin-bottom: var(--gap-md);
+}
+
+/* ─── BRACKETS (Rod Supports) ─── */
+.bracket {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 36px;
+    flex-shrink: 0;
+    z-index: 5;
+}
+
+.bracket-post {
+    width: 14px;
+    height: 32px;
+    background:
+        linear-gradient(90deg,
+            var(--rod-dark) 0%,
+            var(--rod-light) 40%,
+            var(--rod-mid) 100%);
+    border-radius: 3px;
+    box-shadow:
+        2px 3px 6px rgba(0, 0, 0, 0.4),
+        inset 1px 0 0 rgba(255, 255, 255, 0.15);
+}
+
+.bracket-cap {
+    width: 28px;
+    height: 12px;
+    background:
+        linear-gradient(180deg,
+            var(--rod-light) 0%,
+            var(--rod-mid) 50%,
+            var(--rod-dark) 100%);
+    border-radius: 4px 4px 6px 6px;
+    box-shadow:
+        0 3px 6px rgba(0, 0, 0, 0.35),
+        inset 0 1px 0 rgba(255, 255, 255, 0.2);
+    margin-top: -2px;
+}
+
+.bracket-left {
+    transform: scaleY(-1);
+}
+
+/* ─── ROD TRACK ─── */
+.rod-track {
+    flex: 1;
+    position: relative;
+    display: flex;
+    align-items: center;
+    min-height: calc(var(--ball-size) + 16px);
+    padding: 8px 0;
+}
+
+/* ─── ROD BAR (Metallic) ─── */
+.rod-bar {
+    position: absolute;
+    left: -8px;
+    right: -8px;
+    height: 14px;
+    top: 50%;
+    transform: translateY(-50%);
+    border-radius: 7px;
+    background:
+        linear-gradient(180deg,
+            var(--rod-light) 0%,
+            #E8E8E8 20%,
+            var(--rod-mid) 50%,
+            var(--rod-dark) 80%,
+            var(--rod-shadow) 100%);
+    box-shadow:
+        0 3px 8px rgba(0, 0, 0, 0.35),
+        inset 0 1px 0 rgba(255, 255, 255, 0.4),
+        inset 0 -1px 0 rgba(0, 0, 0, 0.15);
+    z-index: 1;
+}
+
+/* ─── BALLS AREA ─── */
+.balls-area {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    z-index: 3;
+    position: relative;
+    padding: 0 6px;
+    min-height: var(--ball-size);
+}
+
+.side-a {
+    flex: 1;
+    justify-content: center;
+}
+
+.side-b {
+    flex: 1;
+    justify-content: center;
+}
+
+/* ─── PARTITION LINE ─── */
+.partition-line {
+    width: 4px;
+    height: calc(var(--ball-size) + 24px);
+    background:
+        linear-gradient(180deg,
+            transparent 0%,
+            var(--wood-edge) 15%,
+            var(--wood-dark) 50%,
+            var(--wood-edge) 85%,
+            transparent 100%);
+    border-radius: 2px;
+    flex-shrink: 0;
+    z-index: 4;
+    box-shadow:
+        1px 0 3px rgba(0, 0, 0, 0.2),
+        -1px 0 3px rgba(0, 0, 0, 0.2);
+    position: relative;
+}
+
+.partition-line::after {
+    content: '';
+    position: absolute;
+    left: 4px;
+    top: 15%;
+    bottom: 15%;
+    width: 1px;
+    background: linear-gradient(180deg, transparent, rgba(255, 255, 255, 0.08), transparent);
+}
+
+/* ─── BALL ─── */
+.ball {
+    width: var(--ball-size);
+    height: var(--ball-size);
+    border-radius: 50%;
+    cursor: pointer;
+    position: relative;
+    flex-shrink: 0;
+    z-index: 3;
+    will-change: transform, opacity;
+    transition:
+        transform 0.15s var(--ease-out),
+        box-shadow 0.15s var(--ease-out),
+        opacity 0.15s var(--ease-out);
+
+    /* 3D red ball gradient */
+    background:
+        radial-gradient(
+            circle at 35% 30%,
+            var(--ball-highlight) 0%,
+            #EF4444 15%,
+            var(--ball-red) 40%,
+            var(--ball-dark) 100%
+        );
+
+    box-shadow:
+        0 4px 8px rgba(0, 0, 0, 0.4),
+        inset 0 -3px 6px rgba(0, 0, 0, 0.2);
+}
+
+/* Specular highlight */
+.ball::after {
+    content: '';
+    position: absolute;
+    top: 8px;
+    left: 12px;
+    width: 16px;
+    height: 10px;
+    border-radius: 50%;
+    background: radial-gradient(
+        ellipse,
+        rgba(255, 255, 255, 0.7) 0%,
+        rgba(255, 255, 255, 0.1) 60%,
+        transparent 100%
+    );
+    transform: rotate(-20deg);
+    pointer-events: none;
+}
+
+/* ─── BALL STATES ─── */
+.ball:hover {
+    transform: translateY(-3px) scale(1.05);
+    box-shadow:
+        0 8px 14px rgba(0, 0, 0, 0.4),
+        0 0 12px var(--ball-glow),
+        inset 0 -3px 6px rgba(0, 0, 0, 0.2);
+}
+
+.ball.selected {
+    transform: translateY(-5px) scale(1.1);
+    box-shadow:
+        0 8px 16px rgba(0, 0, 0, 0.4),
+        0 0 0 3px var(--gold),
+        0 0 18px rgba(255, 215, 0, 0.35),
+        inset 0 -3px 6px rgba(0, 0, 0, 0.2);
+}
+
+.ball.disabled {
+    cursor: not-allowed;
+    opacity: 0.35;
+    pointer-events: none;
+}
+
+.ball.disabled:hover {
+    transform: none;
+    box-shadow:
+        0 4px 8px rgba(0, 0, 0, 0.4),
+        0 2px 4px rgba(0, 0, 0, 0.3),
+        inset 0 -3px 6px rgba(0, 0, 0, 0.2);
+}
+
+/* ─── BALL ON SIDE B (already moved) ─── */
+.ball.moved {
+    opacity: 0.5;
+    cursor: default;
+    pointer-events: none;
+}
+
+.ball.moved:hover {
+    transform: none;
+}
+
+/* ─── BALL SLIDE ANIMATION ─── */
+.ball.sliding {
+    animation: ball-slide 0.35s var(--ease-out) forwards;
+}
+
+@keyframes ball-slide {
+    0% {
+        transform: scale(1);
+        opacity: 1;
+    }
+    40% {
+        transform: translateY(-6px) scale(1.08);
+        opacity: 0.8;
+    }
+    100% {
+        transform: translateY(0) scale(1);
+        opacity: 0.5;
+    }
+}
+
+/* ─── STATUS BAR ─── */
+#status-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: var(--gap-md) var(--gap-lg);
+    background:
+        linear-gradient(180deg,
+            var(--wood-dark) 0%,
+            var(--wood-mid) 50%,
+            var(--wood-dark) 100%);
+    border-radius: 12px;
+    border: 2px solid var(--wood-edge);
+    box-shadow:
+        0 4px 16px rgba(0, 0, 0, 0.4),
+        inset 0 1px 0 rgba(255, 255, 255, 0.05);
+    gap: var(--gap-md);
+    flex-wrap: wrap;
+}
+
+.status-left,
+.status-right {
+    display: flex;
+    align-items: center;
+    gap: var(--gap-sm);
+}
+
+.status-center {
+    flex: 1;
+    text-align: center;
+}
+
+.status-chip {
+    display: inline-flex;
+    align-items: center;
+    padding: 4px 12px;
+    border-radius: 12px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    background: rgba(255, 255, 255, 0.08);
+    color: var(--text-muted);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.selection-chip {
+    color: var(--gold);
+    background: rgba(255, 215, 0, 0.1);
+    border-color: rgba(255, 215, 0, 0.15);
+}
+
+#status-message {
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: var(--text-light);
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
+}
+
+/* ─── ACTION BUTTONS ─── */
+.btn-action {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 6px 14px;
+    border: none;
+    border-radius: 8px;
+    font-family: var(--font-body);
+    font-size: 0.78rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s var(--ease-out);
+}
+
+.btn-confirm {
+    background: linear-gradient(180deg, #22C55E, #16A34A);
+    color: white;
+    box-shadow: 0 2px 8px rgba(34, 197, 94, 0.3);
+}
+
+.btn-confirm:hover:not(:disabled) {
+    background: linear-gradient(180deg, #4ADE80, #22C55E);
+    box-shadow: 0 4px 14px rgba(34, 197, 94, 0.4);
+    transform: translateY(-1px);
+}
+
+.btn-confirm:disabled {
+    opacity: 0.35;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+}
+
+.btn-undo {
+    background: rgba(255, 255, 255, 0.08);
+    color: var(--text-muted);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.btn-undo:hover {
+    background: rgba(255, 255, 255, 0.14);
+    color: var(--text-light);
+}
+
+/* ─── HIDDEN UTILITY ─── */
+.hidden {
+    display: none !important;
+}
+
+/* ─── WIN MODAL ─── */
+.win-modal-content {
+    background:
+        linear-gradient(180deg,
+            var(--wood-mid) 0%,
+            var(--wood-dark) 100%);
+    border: 3px solid var(--wood-edge);
+    border-radius: 20px;
+    box-shadow:
+        0 24px 48px rgba(0, 0, 0, 0.6),
+        inset 0 1px 0 rgba(255, 255, 255, 0.08);
+    position: relative;
+    overflow: hidden;
+    padding: var(--gap-2xl) var(--gap-xl);
+}
+
+.win-modal-content::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+        repeating-linear-gradient(
+            87deg,
+            transparent,
+            transparent 2px,
+            rgba(0, 0, 0, 0.02) 2px,
+            rgba(0, 0, 0, 0.02) 4px
+        );
+    pointer-events: none;
+}
+
+.trophy-icon {
+    margin-bottom: var(--gap-md);
+    color: var(--gold);
+    filter: drop-shadow(0 4px 12px rgba(255, 215, 0, 0.3));
+    animation: trophy-bounce 0.6s var(--ease-bounce);
+}
+
+@keyframes trophy-bounce {
+    0% { transform: scale(0.3); opacity: 0; }
+    60% { transform: scale(1.1); }
+    100% { transform: scale(1); opacity: 1; }
+}
+
+.win-title {
+    font-family: var(--font-display);
+    font-weight: 900;
+    font-size: 2rem;
+    color: var(--gold);
+    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+    margin-bottom: var(--gap-xs);
+}
+
+.win-subtitle {
+    font-size: 0.95rem;
+    color: var(--text-muted);
+    margin-bottom: var(--gap-lg);
+}
+
+.win-stats {
+    display: flex;
+    justify-content: center;
+    gap: var(--gap-xl);
+}
+
+.win-stat {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.stat-value {
+    font-family: var(--font-display);
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--text-light);
+    line-height: 1;
+}
+
+.stat-label {
+    font-size: 0.7rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: var(--text-muted);
+    margin-top: 4px;
+}
+
+/* ─── CONFETTI ─── */
+.confetti-container {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    overflow: hidden;
+    z-index: 0;
+}
+
+.confetti-piece {
+    position: absolute;
+    width: 8px;
+    height: 14px;
+    top: -20px;
+    animation: confetti-fall linear forwards;
+}
+
+@keyframes confetti-fall {
+    0% {
+        transform: translateY(0) rotateZ(0deg) rotateX(0deg);
+        opacity: 1;
+    }
+    75% { opacity: 1; }
+    100% {
+        transform: translateY(400px) rotateZ(720deg) rotateX(360deg);
+        opacity: 0;
+    }
+}
+
+/* ─── RULES PANEL ─── */
+.btn-rules-toggle {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    border: 2px solid var(--wood-mid);
+    background:
+        linear-gradient(180deg, var(--wood-light), var(--wood-dark));
+    color: var(--gold);
+    cursor: pointer;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
+    transition: all 0.2s var(--ease-out);
+}
+
+.btn-rules-toggle:hover {
+    transform: scale(1.1);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.5);
+}
+
+.rules-panel {
+    position: fixed;
+    bottom: 74px;
+    right: 20px;
+    width: 300px;
+    background:
+        linear-gradient(180deg, var(--wood-mid), var(--wood-dark));
+    border: 2px solid var(--wood-edge);
+    border-radius: 14px;
+    padding: var(--gap-lg);
+    z-index: 100;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+    animation: rules-slide-up 0.3s var(--ease-out);
+}
+
+@keyframes rules-slide-up {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.rules-panel h3 {
+    font-family: var(--font-display);
+    font-weight: 700;
+    color: var(--gold);
+    font-size: 1.1rem;
+    margin-bottom: var(--gap-md);
+}
+
+.rules-panel ul {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 var(--gap-md) 0;
+}
+
+.rules-panel li {
+    font-size: 0.82rem;
+    color: var(--text-light);
+    padding: 6px 0;
+    padding-left: 16px;
+    position: relative;
+    line-height: 1.5;
+}
+
+.rules-panel li::before {
+    content: '•';
+    position: absolute;
+    left: 0;
+    color: var(--gold);
+    font-weight: bold;
+}
+
+.rules-panel li strong {
+    color: var(--gold);
+}
+
+.btn-close-rules {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid var(--wood-edge);
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.06);
+    color: var(--text-muted);
+    font-family: var(--font-body);
+    font-size: 0.8rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s var(--ease-out);
+}
+
+.btn-close-rules:hover {
+    background: rgba(255, 255, 255, 0.12);
+    color: var(--text-light);
+}
+
+/* ─── PLAYER TURN INDICATOR ON BOARD ─── */
+.rod-row.rod-active {
+    position: relative;
+}
+
+.rod-row.rod-active::before {
+    content: '';
+    position: absolute;
+    inset: -6px -12px;
+    border-radius: 14px;
+    border: 2px solid rgba(255, 215, 0, 0.2);
+    background: rgba(255, 215, 0, 0.03);
+    pointer-events: none;
+    animation: rod-glow 1.5s ease-in-out infinite;
+}
+
+@keyframes rod-glow {
+    0%, 100% { border-color: rgba(255, 215, 0, 0.15); }
+    50% { border-color: rgba(255, 215, 0, 0.35); }
+}
+
+/* ─── RESPONSIVE ─── */
+@media (max-width: 768px) {
+    :root {
+        --ball-size: 38px;
+    }
+
+    .header-inner {
+        justify-content: center;
+        text-align: center;
+    }
+
+    .header-controls {
+        justify-content: center;
+    }
+
+    #game-container {
+        padding: var(--gap-md);
+    }
+
+    #game-board {
+        padding: var(--gap-md) var(--gap-md);
+        border-radius: 12px;
+    }
+
+    .side-labels {
+        padding: 0 40px;
+    }
+
+    .bracket {
+        width: 28px;
+    }
+
+    .bracket-cap {
+        width: 22px;
+    }
+
+    .bracket-post {
+        width: 11px;
+        height: 26px;
+    }
+
+    .rod-bar {
+        height: 10px;
+    }
+
+    #status-bar {
+        flex-direction: column;
+        text-align: center;
+        padding: var(--gap-sm) var(--gap-md);
+        gap: var(--gap-sm);
+    }
+
+    .status-left,
+    .status-right {
+        justify-content: center;
+    }
+
+    .rules-panel {
+        right: 10px;
+        left: 10px;
+        width: auto;
+        bottom: 70px;
+    }
+}
+
+@media (max-width: 480px) {
+    :root {
+        --ball-size: 32px;
+    }
+
+    #game-title {
+        font-size: 1.8rem;
+    }
+
+    .logo-subtitle {
+        display: none;
+    }
+
+    .player-badge {
+        padding: 4px 10px;
+        font-size: 0.72rem;
+    }
+
+    .rod-row {
+        margin-bottom: var(--gap-lg);
+    }
+
+    .balls-area {
+        gap: 2px;
+        padding: 0 3px;
+    }
+
+    .side-labels {
+        padding: 0 28px;
+        font-size: 0.7rem;
+    }
+
+    .side-label {
+        font-size: 0.7rem;
+        letter-spacing: 2px;
+    }
+}
+
+/* ─── REDUCED MOTION ─── */
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+}
